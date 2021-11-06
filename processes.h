@@ -12,15 +12,15 @@ using namespace std;
 class Process
 {
   private:
-    int start;
-    int time;
+    float start;
+    float time;
     int space;
 
   public:
-    Process(const int startTime, const int duration, const int spaceNeeded): start(startTime), time(duration), space(spaceNeeded) {}
+    Process(const float startTime, const float duration, const int spaceNeeded): start(startTime), time(duration), space(spaceNeeded) {}
 
-    int getStartTime() {return start;}
-    int getDuration() {return time;}
+    float getStartTime() {return start;}
+    float getDuration() {return time;}
     int getSpaceNeeded() {return space;}
 };
 
@@ -32,14 +32,27 @@ class Process
 class ProcessCreator
 {
   private:
-    // store all the parameters needed to describe the creation here
+    int n;
+    float avgSize;
+    float stdSize;
+    float startTime;
+    float endTime;
     int seed;
 
   public:
-    // add additional parameters to constructor
-    ProcessCreator(const int s): seed(s) {}
+    ProcessCreator(const int nProcesses, const float avgProcessSize, const float stdProcessSize,
+                   const float earliestTime, const float latestTime, const int random_seed):
+      n(nProcesses), avgSize(avgProcessSize), stdSize(stdProcessSize), 
+      startTime(earliestTime), endTime(latestTime), seed(random_seed) {}
 
-    vector<Process> createProcesses();
+    /**
+     * Creates the array of processes with the given parameters. The size of the processes 
+     * will follow a normal distribution and the start time of the processes will follow
+     * a uniform distribution
+     * 
+     * @return the processes generated using the parameters
+     */
+    vector<Process> createProcesses() const;
 };
 
 #endif

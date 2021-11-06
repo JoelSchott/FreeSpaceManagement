@@ -29,10 +29,10 @@ class MemorySpace
 {
   private:
     int space;
-    int time;
+    float time;
   
   public:
-    MemorySpace(const int size, const int t=0): space(size), time(t) {}
+    MemorySpace(const int size, const float t=0): space(size), time(t) {}
 
     /**
      * Inserts the given process at the given location in the memory space. The memory space 
@@ -49,7 +49,7 @@ class MemorySpace
      * 
      * @param newTime the time that the memory space should be updated to reflect
      */
-    void updateTime(const int newTime);
+    void updateTime(const float newTime);
 
     /**
      * Finds all of the holes in the memory space at the current time
@@ -59,12 +59,19 @@ class MemorySpace
     vector<Hole> getHoles();
 
     /**
-     * Finds how long it will be until a process finishes. At least one process must be running
-     * in the memory space when this is called.
+     * Finds how long it will be until the next process finishes. If no processes
+     * are currently running, -1 is returned
      * 
      * @return the time until the next process finishes
      */
-    int timeUntilNextFinishes();
+    float timeUntilNextFinishes();
+
+    /**
+     * Finds how much of the memory space is currently being used by processes
+     * 
+     * @return the number of memory spaces that are being used by processes
+     */
+    int usage();
 };
 
 #endif
