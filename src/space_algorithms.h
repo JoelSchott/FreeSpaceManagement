@@ -43,9 +43,9 @@ class SpaceAlgorithm
 class BestFit : SpaceAlgorithm
 {
   public:
-  /**
-   * Looks through all of the holes and finds the smallest hole that has sufficient size
-   */
+    /**
+     * Looks through all of the holes and finds the smallest hole that has sufficient size
+     */
     SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
 };
 
@@ -61,19 +61,19 @@ class WorstFit : SpaceAlgorithm
 class NextFit : SpaceAlgorithm
 {
   public:
-  /**
-   * Keeps track of the current hole and examines the holes starting with the hole after
-   * the current hole, stopping when a hole of sufficient size is found
-   */
+    /**
+     * Keeps track of the current hole and examines the holes starting with the hole after
+     * the current hole, stopping when a hole of sufficient size is found
+     */
     SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
 };
 
 class FirstFit : SpaceAlgorithm
 {
   public:
-  /**
-   * Starting from the beginning, finds the first hole that is of sufficient size
-   */
+    /**
+     * Starting from the beginning, finds the first hole that is of sufficient size
+     */
     SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
 };
 

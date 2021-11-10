@@ -24,6 +24,6 @@ class ExperimentResult
     float getAverageUsage() {return averageUsage;}
 };
 
-ExperimentResult runExperiment(const ProcessCreator & pc, const SpaceAlgorithm * a, const int memorySize);
+ExperimentResult runExperiment(const vector<Process> & processes, const SpaceAlgorithm * a, const int memorySize);
 
 #endif

@@ -1,6 +1,6 @@
 #include "experiment.h"
 
-ExperimentResult runExperiment(const ProcessCreator & pc, const SpaceAlgorithm * a, const int memorySize)
+ExperimentResult runExperiment(const vector<Process> & processes, const SpaceAlgorithm * a, const int memorySize)
 {
   int holeChecks = 0;
   int failedAllocs = 0;
@@ -10,7 +10,6 @@ ExperimentResult runExperiment(const ProcessCreator & pc, const SpaceAlgorithm *
   float currentTime = 0;
   int nextProcessIndex = 0;
   MemorySpace space(memorySize, currentTime);
-  vector<Process> processes = pc.createProcesses();
   queue<Process> waitingProcesses;
 
   while (nextProcessIndex < processes.size() || !waitingProcesses.empty() || space.timeUntilNextFinishes() != -1)
