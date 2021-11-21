@@ -18,8 +18,8 @@ class Hole
   public:
     Hole(const int l, const int s): location(l), size(s) {}
 
-    int getLocation() {return location;}
-    int getSize() {return size;}
+    int getLocation() const {return location;}
+    int getSize() const {return size;}
 };
 
 /**
