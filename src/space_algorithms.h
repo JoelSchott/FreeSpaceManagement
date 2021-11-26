@@ -66,6 +66,9 @@ class NextFit : SpaceAlgorithm
      * the current hole, stopping when a hole of sufficient size is found
      */
     SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
+
+  private:
+    int head = 0;
 };
 
 class FirstFit : SpaceAlgorithm

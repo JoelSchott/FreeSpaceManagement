@@ -29,3 +29,37 @@ SearchResult BestFit::findHole(const vector<Hole> & holes, const Process & p) co
 
   return SearchResult(holeFound, bestHole, holesChecked);
 }
+
+SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) const {
+  bool validHole = false;
+  int holesChecked = 0;
+  Hole bestHole(-1, -1);
+  while(!validHole && (holesChecked < holes.size()-1))
+  {
+    if(p.getSpaceNeeded() <= holes[holesChecked].getSize())
+    {
+      validHole = true;
+      bestHole = holes[holesChecked];
+    }
+    holesChecked++;
+  }
+
+  return SearchResult(validHole, bestHole, holesChecked);
+}
+
+SearchResult NextFit::findHole(const vector<Hole> & holes, const Process & p) const {
+  bool validHole = false;
+  int holesChecked = 0;
+  Hole bestHole(-1, -1);
+  while(!validHole && (holesChecked < holes.size()-1))
+  {
+    if(p.getSpaceNeeded() <= holes[(head + holesChecked) % holes.size()].getSize())
+    {
+      validHole = true;
+      bestHole = holes[(head + holesChecked) % holes.size()];
+    }
+    holesChecked++;
+  }
+  
+  return SearchResult(validHole, bestHole, holesChecked);
+}
