@@ -51,7 +51,7 @@ SearchResult NextFit::findHole(const vector<Hole> & holes, const Process & p) {
   bool validHole = false;
   int holesChecked = 0;
   Hole bestHole(-1, -1);
-  int currHead = head;
+  int currHead = head % holes.size();
   while(!validHole && (holesChecked < holes.size()))
   {
     if(p.getSpaceNeeded() <= holes[currHead].getSize())
