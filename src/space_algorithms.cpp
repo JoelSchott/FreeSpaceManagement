@@ -30,6 +30,32 @@ SearchResult BestFit::findHole(const vector<Hole> & holes, const Process & p) co
   return SearchResult(holeFound, bestHole, holesChecked);
 }
 
+SearchResult WorstFit::findHole(const vector<Hole> & holes, const Process & p) const {
+  Hole worstHole(-1, -1);
+  int mostWastedSpace = -1;
+  int holesChecked = 0;
+  // look through each hole for the best-fitting hole
+  for (const Hole h : holes)
+  {
+    holesChecked++;
+    int wastedSpace = h.getSize() - p.getSpaceNeeded();
+    // if the process fits in this hole
+    if (wastedSpace >= 0)
+    {
+      // if it is a better fit than the previous best
+      if (mostWastedSpace == -1 || wastedSpace > mostWastedSpace)
+      {
+        worstHole = h;
+        mostWastedSpace = wastedSpace;
+        
+      }
+    } 
+  }
+  bool holeFound = (mostWastedSpace != -1);
+
+  return SearchResult(holeFound, worstHole, holesChecked);
+}
+
 SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) const {
   bool validHole = false;
   int holesChecked = 0;
