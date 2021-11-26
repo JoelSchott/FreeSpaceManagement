@@ -65,7 +65,7 @@ class NextFit : SpaceAlgorithm
      * Keeps track of the current hole and examines the holes starting with the hole after
      * the current hole, stopping when a hole of sufficient size is found
      */
-    SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
+    SearchResult findHole(const vector<Hole> & holes, const Process & p);
 
   private:
     int head = 0;

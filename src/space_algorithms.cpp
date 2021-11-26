@@ -34,7 +34,7 @@ SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) c
   bool validHole = false;
   int holesChecked = 0;
   Hole bestHole(-1, -1);
-  while(!validHole && (holesChecked < holes.size()-1))
+  while(!validHole && (holesChecked < holes.size()))
   {
     if(p.getSpaceNeeded() <= holes[holesChecked].getSize())
     {
@@ -47,19 +47,21 @@ SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) c
   return SearchResult(validHole, bestHole, holesChecked);
 }
 
-SearchResult NextFit::findHole(const vector<Hole> & holes, const Process & p) const {
+SearchResult NextFit::findHole(const vector<Hole> & holes, const Process & p) {
   bool validHole = false;
   int holesChecked = 0;
   Hole bestHole(-1, -1);
-  while(!validHole && (holesChecked < holes.size()-1))
+  int currHead = head;
+  while(!validHole && (holesChecked < holes.size()))
   {
-    if(p.getSpaceNeeded() <= holes[(head + holesChecked) % holes.size()].getSize())
+    if(p.getSpaceNeeded() <= holes[currHead].getSize())
     {
       validHole = true;
-      bestHole = holes[(head + holesChecked) % holes.size()];
+      bestHole = holes[currHead];
     }
     holesChecked++;
+    currHead = (head + holesChecked) % holes.size();
   }
-  
+  head = currHead;
   return SearchResult(validHole, bestHole, holesChecked);
 }
