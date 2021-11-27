@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -15,8 +16,8 @@ int main(){
   const int NUM_PROCESS_TRIALS = 3;
   const int NUM_RAND_SEED_TRIALS = 5;
   const int MEMORY_SPACE_SIZE = 100;
+  const string OUT_FILE = "experiment_results.csv";
   
-
   int processSizeAvg [NUM_SIZE_TRIALS] = {10, 15, 15};
   int processSizeStd [NUM_SIZE_TRIALS] = {2, 2, 10};
   
@@ -26,7 +27,11 @@ int main(){
   int numProcesses [NUM_PROCESS_TRIALS] = {50, 50, 50};
   int arrivalEndingTime [NUM_PROCESS_TRIALS] = {20, 40, 60};
 
-
+  ofstream writer(OUT_FILE);
+  // write the header
+  writer << "Algorithm,Average Process Size,Standard Deviation Process Size,Average Process Time,"
+         << "Standard Deviation Process Time,Number of Processes,Size of Process Arrival Window,"
+         << "Random Seed,Total Hole Checks,Number of Failed Allocations,Total Wait Time,Average Usage\n";
   for (int sizeTrial = 0; sizeTrial < NUM_SIZE_TRIALS; sizeTrial++)
   {
     for (int timeTrial = 0; timeTrial < NUM_TIME_TRIALS; timeTrial++)
@@ -42,23 +47,25 @@ int main(){
                                                       processTimeStd[timeTrial],
                                                       0, arrivalEndingTime[processTrial],
                                                       seedTrial);
-          BestFit bestFit;
-          SpaceAlgorithm * bf = &bestFit;
-          ExperimentResult bestFitResult = runExperiment(processes, bf, MEMORY_SPACE_SIZE);
-          NextFit nextFit;
-          SpaceAlgorithm * nf = &nextFit;
-          ExperimentResult nextFitResult = runExperiment(processes, nf, MEMORY_SPACE_SIZE);
-          WorstFit worstFit;
-          SpaceAlgorithm * wf = &worstFit;
-          ExperimentResult worstFitResult = runExperiment(processes, wf, MEMORY_SPACE_SIZE);
-          FirstFit firstFit;
-          SpaceAlgorithm * ff = &firstFit;
-          ExperimentResult firtFitResult = runExperiment(processes, ff, MEMORY_SPACE_SIZE);
-
-          // write these results to a csv file with columns for parameters and results
+          BestFit bf;
+          WorstFit wf;
+          NextFit nf;
+          FirstFit ff;
+          vector<SpaceAlgorithm> algs = {bf, wf, nf, ff};
+          string alg_names [4] = {"Best Fit", "Worst Fit", "Next Fit", "First fit"};
+          for (int a = 0; a < 4; a++)
+          {
+            SpaceAlgorithm * spaceAlg = &algs[a];
+            ExperimentResult result = runExperiment(processes, spaceAlg, MEMORY_SPACE_SIZE);
+            writer << alg_names[a] << "," << processSizeAvg[sizeTrial] << "," << processSizeStd[sizeTrial] << ","
+                   << processTimeAvg[timeTrial] << "," << processTimeStd[timeTrial] << "," << numProcesses[processTrial] << ","
+                   << arrivalEndingTime[processTrial] << "," << seedTrial << "," << result.getTotalHoleChecks() << ","
+                   << result.getNumFailedAllocations() << "," << result.getTotalWaitTime() << "," << result.getAverageUsage() << "\n";
+          }
         }
       }
     }
   }
+  writer.close();
   return 0;
 }
