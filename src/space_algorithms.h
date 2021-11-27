@@ -37,28 +37,28 @@ class SpaceAlgorithm
      * @param p the process to allocate in one of the holes
      * @return the outcome of the search
      */ 
-    virtual SearchResult findHole(const vector<Hole> & holes, const Process & p) const = 0;
+    virtual SearchResult findHole(const vector<Hole> & holes, const Process & p) = 0;
 };
 
-class BestFit : SpaceAlgorithm
+class BestFit : public SpaceAlgorithm
 {
   public:
     /**
      * Looks through all of the holes and finds the smallest hole that has sufficient size
      */
-    SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
+    SearchResult findHole(const vector<Hole> & holes, const Process & p);
 };
 
-class WorstFit : SpaceAlgorithm
+class WorstFit : public SpaceAlgorithm
 {
   public:
     /**
      * Looks through all of the holes and finds the largest hole if the largest hole is large enough
      */ 
-    SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
+    SearchResult findHole(const vector<Hole> & holes, const Process & p);
 };
 
-class NextFit : SpaceAlgorithm
+class NextFit : public SpaceAlgorithm
 {
   public:
     /**
@@ -71,13 +71,13 @@ class NextFit : SpaceAlgorithm
     int head = 0;
 };
 
-class FirstFit : SpaceAlgorithm
+class FirstFit : public SpaceAlgorithm
 {
   public:
     /**
      * Starting from the beginning, finds the first hole that is of sufficient size
      */
-    SearchResult findHole(const vector<Hole> & holes, const Process & p) const;
+    SearchResult findHole(const vector<Hole> & holes, const Process & p);
 };
 
 #endif
