@@ -5,6 +5,9 @@
 #include "processes.h"
 #include "space_algorithms.h"
 #include "memory_space.h"
+#include <iostream>
+
+using namespace std;
 
 class ExperimentResult
 {
@@ -24,6 +27,6 @@ class ExperimentResult
     float getAverageUsage() {return averageUsage;}
 };
 
-ExperimentResult runExperiment(const vector<Process> & processes, const SpaceAlgorithm * a, const int memorySize);
+ExperimentResult runExperiment(vector<Process> & processes, SpaceAlgorithm * a, const int memorySize);
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "memory_space.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 

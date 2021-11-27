@@ -18,7 +18,13 @@ vector<Process> createProcesses(const int nProcesses, const float avgProcessSize
     float timeProportion = rand() / static_cast<float>(RAND_MAX);
     float time = timeProportion * (latestTime - earliestTime) + earliestTime;
 
-    processes.push_back(Process(time, duration, size));
+    Process newProcess(time, duration, size);
+    int insertIndex = 0;
+    while (insertIndex < processes.size() && newProcess.getStartTime() > processes[insertIndex].getStartTime())
+    {
+      insertIndex++;
+    }
+    processes.insert(processes.begin() + insertIndex, newProcess);
   }
 
   return processes;

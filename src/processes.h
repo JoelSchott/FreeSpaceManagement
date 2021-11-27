@@ -15,14 +15,18 @@ class Process
   private:
     float start;
     float time;
+    float allocTime;
     int space;
 
   public:
     Process(const float startTime, const float duration, const int spaceNeeded): start(startTime), time(duration), space(spaceNeeded) {}
 
     float getStartTime() const {return start;}
+    float getAllocTime() const {return allocTime;}
     float getDuration() const {return time;}
     int getSpaceNeeded() const {return space;}
+
+    void setAllocTime(const float t){allocTime = t;}
 };
 
 

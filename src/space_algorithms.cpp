@@ -76,9 +76,16 @@ SearchResult NextFit::findHole(const vector<Hole> & holes, const Process & p) {
   bool validHole = false;
   int holesChecked = 0;
   Hole bestHole(-1, -1);
+  // make sure there is at least one hole
+  if (holes.size() == 0)
+  {
+    head = 0;
+    return SearchResult(validHole, bestHole, holesChecked);
+  }
   int currHead = head % holes.size();
   while(!validHole && (holesChecked < holes.size()))
   {
+    cout << "Checking a hole..." << endl;
     if(p.getSpaceNeeded() <= holes[currHead].getSize())
     {
       validHole = true;

@@ -51,12 +51,11 @@ int main(){
           WorstFit wf;
           NextFit nf;
           FirstFit ff;
-          vector<SpaceAlgorithm> algs = {bf, wf, nf, ff};
+          vector<SpaceAlgorithm*> algs = {&bf, &wf, &nf, &ff};
           string alg_names [4] = {"Best Fit", "Worst Fit", "Next Fit", "First fit"};
           for (int a = 0; a < 4; a++)
           {
-            SpaceAlgorithm * spaceAlg = &algs[a];
-            ExperimentResult result = runExperiment(processes, spaceAlg, MEMORY_SPACE_SIZE);
+            ExperimentResult result = runExperiment(processes, algs[a], MEMORY_SPACE_SIZE);
             writer << alg_names[a] << "," << processSizeAvg[sizeTrial] << "," << processSizeStd[sizeTrial] << ","
                    << processTimeAvg[timeTrial] << "," << processTimeStd[timeTrial] << "," << numProcesses[processTrial] << ","
                    << arrivalEndingTime[processTrial] << "," << seedTrial << "," << result.getTotalHoleChecks() << ","
@@ -67,5 +66,6 @@ int main(){
     }
   }
   writer.close();
+  cout << "done" << endl;
   return 0;
 }

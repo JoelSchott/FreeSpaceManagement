@@ -1,6 +1,6 @@
 #include "experiment.h"
 
-ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm * a, const int memorySize)
+ExperimentResult runExperiment(vector<Process> & processes, SpaceAlgorithm * a, const int memorySize)
 {
   int holeChecks = 0;
   int failedAllocs = 0;
@@ -14,6 +14,10 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
 
   while (nextProcessIndex < processes.size() || !waitingProcesses.empty() || space.timeUntilNextFinishes() != -1)
   {
+    cout << "-------------------------------------" << endl;
+    cout << "Next Process Index " << nextProcessIndex << endl;
+    cout << "Num waiting processes " << waitingProcesses.size() << endl;
+    cout << "Time until next finished " << space.timeUntilNextFinishes() << endl;
     // find which event will come next, either a process finishes or the next process starts
     bool nextProcessStarts = false;
     float nextFinishTime = space.timeUntilNextFinishes();
@@ -35,6 +39,7 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
     // if a new process is starting
     if (nextProcessStarts)
     {
+      cout << "Starting the next process" << endl;
       float deltaTime = processes[nextProcessIndex].getStartTime() - currentTime;
       // if there are already processes waiting, then this process must wait as well
       if (waitingProcesses.size() > 0)
@@ -49,6 +54,7 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
         // if the placement was successful
         if (result.didFindHole())
         {
+          processes[nextProcessIndex].setAllocTime(processes[nextProcessIndex].getStartTime());
           space.insertProcess(processes[nextProcessIndex], result.getHole().getLocation());
         }
         // if there was no location found for the process
@@ -67,6 +73,7 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
     // if a process finishes next
     else
     {
+      cout << "Finishing a process" << endl;
       totalWaitTime += nextFinishTime * waitingProcesses.size();
       averageUsage += nextFinishTime * space.usage();
       currentTime += nextFinishTime;
@@ -76,10 +83,12 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
       bool canPlaceFirst = true;
       while (waitingProcesses.size() > 0 && canPlaceFirst)
       {
+        cout << "Trying to place a process from the waiting list" << endl;
         SearchResult result = a->findHole(space.getHoles(), waitingProcesses.front());
         holeChecks += result.getHolesSearched();
         if (result.didFindHole())
         {
+          waitingProcesses.front().setAllocTime(currentTime);
           space.insertProcess(waitingProcesses.front(), result.getHole().getLocation());
           waitingProcesses.pop();
         }
@@ -94,5 +103,6 @@ ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm
 
   averageUsage /= currentTime;
   ExperimentResult result(holeChecks, failedAllocs, totalWaitTime, averageUsage);
+  cout << "Experiment Finished!" << endl;
   return result;
 }
