@@ -1,6 +1,6 @@
 #include "space_algorithms.h"
 
-SearchResult BestFit::findHole(const vector<Hole> & holes, const Process & p) const {
+SearchResult BestFit::findHole(const vector<Hole> & holes, const Process & p) {
   Hole bestHole(-1, -1);
   int bestWastedSpace = -1;
   int holesChecked = 0;
@@ -30,7 +30,7 @@ SearchResult BestFit::findHole(const vector<Hole> & holes, const Process & p) co
   return SearchResult(holeFound, bestHole, holesChecked);
 }
 
-SearchResult WorstFit::findHole(const vector<Hole> & holes, const Process & p) const {
+SearchResult WorstFit::findHole(const vector<Hole> & holes, const Process & p) {
   Hole worstHole(-1, -1);
   int mostWastedSpace = -1;
   int holesChecked = 0;
@@ -55,7 +55,7 @@ SearchResult WorstFit::findHole(const vector<Hole> & holes, const Process & p) c
   return SearchResult(holeFound, worstHole, holesChecked);
 }
 
-SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) const {
+SearchResult FirstFit::findHole(const vector<Hole> & holes, const Process & p) {
   bool validHole = false;
   int holesChecked = 0;
   Hole bestHole(-1, -1);
