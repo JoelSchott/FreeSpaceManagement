@@ -1,6 +1,6 @@
 #include "experiment.h"
 
-ExperimentResult runExperiment(const vector<Process> & processes, const SpaceAlgorithm * a, const int memorySize)
+ExperimentResult runExperiment(const vector<Process> & processes, SpaceAlgorithm * a, const int memorySize)
 {
   int holeChecks = 0;
   int failedAllocs = 0;

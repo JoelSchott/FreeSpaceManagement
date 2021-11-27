@@ -4,38 +4,49 @@ void MemorySpace::insertProcess(const Process p, const int location)
 {
   // First we need to check if there is room for 
   // the process at the given location
-  bool validLocation;
-  if(memory[location] == -1)
+  bool validLocation = true;
+  for (int i = 0; i < p.getSpaceNeeded(); i++)
   {
-    validLocation = true;
-    for(int i = 1; i < p.getSpaceNeeded(); i++)
-      if(memory[location+i] != -1)
-        validLocation = false;
+    if (location + i >= memory.size())
+    {
+      validLocation = false;
+      break;
+    }
+    if (memory[location + i])
+    {
+      validLocation = false;
+      break;
+    }
   }
-  else
-    //TODO: throw error
+  if (!validLocation)
+  {
+    throw runtime_error("Tried to insert a process at an invalid location");
+  }
   // Now that we know the space if free, we can insert it into the memory
-  if (validLocation)
-  {
-    for(int i = 0; i < p.getSpaceNeeded(); i++)
-      memory[location+i] = 1; // 1 represents an unavailable piece of memory
-    activeProcesses.push_back({p,p.getDuration(),location});
-  }
-  return;
+  for(int i = 0; i < p.getSpaceNeeded(); i++)
+    memory[location+i] = true; // 1 represents an unavailable piece of memory
+  activeProcesses.push_back(Process(p.getStartTime(), p.getDuration(), p.getSpaceNeeded()));
+  activeProcessLocations.push_back(location);
 }
 
 void MemorySpace::updateTime(const float newTime)
 {
-  for (auto& [p, duration, location] : activeProcesses) {
-    duration--;
-    // if the process is done, remove it from memory
-    if(duration == 0)
+  for (int i = activeProcesses.size() - 1; i >=0; i--)
+  {
+    // if the process should be removed
+    if (newTime >= activeProcesses[i].getStartTime() + activeProcesses[i].getDuration())
     {
-      for(int i = 0; i < p.getSpaceNeeded(); i++)
-        memory[location+i] = 0;
+      // deallocate the memory
+      for (int j = 0; j < activeProcesses[i].getSpaceNeeded(); j++)
+      {
+        memory[activeProcessLocations[i] + j] = false;
+      }
+      // remove the process and the location
+      activeProcesses.erase(activeProcesses.begin() + i);
+      activeProcessLocations.erase(activeProcessLocations.begin() + i);
     }
   }
-  return;
+  time = newTime;
 }
 
 vector<Hole> MemorySpace::getHoles()
@@ -67,10 +78,11 @@ float MemorySpace::timeUntilNextFinishes()
     return -1;
 
   float minTimeLeft = 99999; // a number theoretically bigger than any input duration
-  for(auto& [p, duration, location] : activeProcesses)
+  for(Process p : activeProcesses)
   {
-    if(duration < minTimeLeft)
-      minTimeLeft = duration;
+    float timeLeft = p.getStartTime() + p.getDuration() - time;
+    if(timeLeft < minTimeLeft)
+      minTimeLeft = timeLeft;
   }
   return minTimeLeft;
 }

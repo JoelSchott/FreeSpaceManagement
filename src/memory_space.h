@@ -3,6 +3,7 @@
 
 #include "processes.h"
 #include <vector>
+#include <stdexcept>
 
 using namespace std;
 
@@ -30,9 +31,18 @@ class MemorySpace
   private:
     int space;
     float time;
+    vector<bool> memory;
+    vector<Process> activeProcesses;
+    vector<int> activeProcessLocations;
   
   public:
-    MemorySpace(const int size, const float t=0): space(size), time(t) {}
+    MemorySpace(const int size, const float t=0): space(size), time(t)
+    {
+      for (int i = 0; i < size; i++)
+      {
+        memory.push_back(false);
+      }
+    }
 
     /**
      * Inserts the given process at the given location in the memory space. The memory space 
