@@ -46,8 +46,7 @@ SearchResult WorstFit::findHole(const vector<Hole> & holes, const Process & p) c
       if (mostWastedSpace == -1 || wastedSpace > mostWastedSpace)
       {
         worstHole = h;
-        mostWastedSpace = wastedSpace;
-        
+        mostWastedSpace = wastedSpace;    
       }
     } 
   }
